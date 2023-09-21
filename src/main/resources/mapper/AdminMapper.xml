@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapper.AdminMapper" >
+  <resultMap id="BaseResultMap" type="com.entity.Admin" >
+    <id column="admin_id" property="adminId" jdbcType="INTEGER" />
+    <result column="admin_name" property="adminName" jdbcType="VARCHAR" />
+    <result column="admin_password" property="adminPassword" jdbcType="VARCHAR" />
+    <result column="admin_phone" property="adminPhone" jdbcType="VARCHAR" />
+    <result column="admin_Email" property="adminEmail" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from jh_admin
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.entity.Admin" >
+    insert into jh_admin (admin_id, admin_name, admin_password, 
+      admin_phone, admin_Email)
+    values (#{adminId,jdbcType=INTEGER}, #{adminName,jdbcType=VARCHAR}, #{adminPassword,jdbcType=VARCHAR}, 
+      #{adminPhone,jdbcType=VARCHAR}, #{adminEmail,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.entity.Admin" >
+    update jh_admin
+    set admin_name = #{adminName,jdbcType=VARCHAR},
+      admin_password = #{adminPassword,jdbcType=VARCHAR},
+      admin_phone = #{adminPhone,jdbcType=VARCHAR},
+      admin_Email = #{adminEmail,jdbcType=VARCHAR}
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select admin_id, admin_name, admin_password, admin_phone, admin_Email
+    from jh_admin
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </select>
+  <select id="verifyAdmin" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select admin_id, admin_name, admin_password, admin_phone, admin_Email
+    from jh_admin
+    where admin_name = #{adminName,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select admin_id, admin_name, admin_password, admin_phone, admin_Email
+    from jh_admin
+  </select>
+  <delete id="batchDelete" parameterType="list">
+    DELETE from jh_admin
+    <foreach collection="ids" item="adminId" separator="," open="where admin_id in(" close=")">
+      #{adminId}
+    </foreach>
+  </delete>
+  <select id="getAdminCount" resultType="int">
+    SELECT COUNT(*) AS record FROM jh_admin;
+  </select>
+</mapper>

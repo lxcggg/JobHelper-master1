@@ -1,0 +1,292 @@
+﻿<html  xmlns:th="http://www.thymeleaf.org" >
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<link rel="stylesheet" type="text/css" th:href="@{/static/h-ui/css/H-ui.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/static/h-ui.admin/css/H-ui.admin.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/static/lib/Hui-iconfont/1.0.8/iconfont.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/static/h-ui.admin/skin/default/skin.css}" id="skin"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/static/h-ui.admin/css/style.css}"/>
+<title>我的桌面</title>
+	<style>
+
+		.table-header {
+			color: blue;
+			font-size: 1.2em;
+			font-weight: bold;
+			text-align: left;
+		}
+
+	</style>
+</head>
+<body>
+<div class="page-container">
+	<p class="f-20 text-success">欢迎使用职助网后台管理系统 <span class="f-14">v1.0</span>后台！</p>
+	<table class="table table-border table-bordered table-bg">
+		<thead>
+		<tr>
+			<th colspan="7" scope="col"><span class="table-header">信息统计</span></th>
+		</tr>
+		<tr class="text-c">
+			<th>统计</th>
+			<th>博客量</th>
+			<th>简历数</th>
+			<th>职位数</th>
+			<th>用户</th>
+			<th>反馈</th>
+			<th>管理员</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr class="text-c">
+				<td>总数</td>
+				<td><span th:text="${session.blogs.size()}"></span></td>
+				<td><span th:text="${session.resumes.size()}"></span></td>
+				<td><span th:text="${session.jobs.size()}"></span></td>
+				<td><span th:text="${session.users.size()}"></span></td>
+				<td><span th:text="${session.contacts.size()}"></span></td>
+				<td><span th:text="${session.admins.size()}"></span></td>
+			</tr>
+		</tbody>
+	</table>
+	<table class="table table-border table-bordered table-bg mt-20">
+		<div style="display: flex; background-color: seashell;">
+			<div style="width: 50%;">
+				<h2 style="text-align: center; color: black; padding: 10px;">信息统计柱状图</h2>
+				<div id="main" style="width: 100%; height: 400px;"></div>
+			</div>
+			<div style="width: 50%;">
+				<h2 style="text-align: center; color: black; padding: 10px;">信息总结图</h2>
+				<div id="main2" style="width: 100%; height: 400px;"></div>
+			</div>
+		</div>
+
+		<!-- 单独成为一个模块 -->
+		<div style="background-color: gainsboro;">
+			<h2 style="text-align: center; color: #fff; padding: 10px;">信息总结</h2>
+			<div id="main3" style="width: 100%; height: 400px;"></div>
+		</div>
+
+	</table>
+</div>
+<footer class="footer mt-20">
+	<div class="container">
+		<p>感谢jQuery、javascript、bootstrap、thymeleaf、springMVC、spring、mybatis、maven、EChart<br>
+			 &copy;2023-9 职助网.admin v1.0 版权所有.<br>
+<!--			<a th:href="@{http://www.h-ui.net/}" target="_blank" title="H-ui前端框架">-->
+<!--			<a th:href="@{http://www.cssmoban.com/}" target="_blank" title="模板之家">模板之家</a> - Collect from <a th:href="@{http://www.cssmoban.com/}" title="网页模板" target="_blank">网页模板</a>-->
+			<p>More Templates</p>
+	</div>
+</footer>
+<script type="text/javascript" th:src="@{/static/lib/jquery/1.9.1/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/h-ui/js/H-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/echarts.min.js}" crossorigin="anonymous"></script>
+<script type="text/javascript">
+
+	// 创建柱状图
+	var chartDom = document.getElementById('main');
+	var myChart = echarts.init(chartDom);
+	var option;
+
+	// 定义函数，用于更新柱状图数据和刷新图表
+	function updateChart(data) {
+		// 更新柱状图的数据
+		option.series[0].data = data;
+
+		// 刷新图表
+		myChart.setOption(option);
+	}
+
+	// 发起 AJAX 请求，从服务器获取最新的数据
+	function fetchData() {
+		$.ajax({
+			url: 'staticAll', // 替换为你的 API 地址
+			type: 'GET',
+			dataType: 'json',
+			success: function(dataFromDatabase) {
+				// 将数据库数据转换为图表所需的格式
+				var newData = Object.values(dataFromDatabase);
+
+				// 更新柱状图并刷新
+				updateChart(newData);
+			},
+			error: function(xhr, status, error) {
+				console.error('从数据库获取数据失败:', error);
+			}
+		});
+	}
+
+	// 初始化柱状图配置
+	option = {
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: {
+				type: 'shadow'
+			}
+		},
+		grid: {
+			left: '3%',
+			right: '4%',
+			bottom: '3%',
+			containLabel: true
+		},
+		xAxis: [
+			{
+				type: 'category',
+				data: ['简历数', '用户', '反馈', '博客量', '职位数', '管理员'],
+				axisTick: {
+					alignWithLabel: true
+				}
+			}
+		],
+		yAxis: [
+			{
+				type: 'value'
+			}
+		],
+		series: [
+			{
+				name: '数量',
+				type: 'bar',
+				barWidth: '60%',
+				data: [0, 0, 0, 0, 0, 0]
+			}
+		]
+	};
+
+	// 在适当的时机调用 fetchData() 方法来获取最新数据并更新图表
+	fetchData();
+	// 刷新图表
+	myChart.setOption(option);
+
+	// 饼图配置
+	var chartDom2 = document.getElementById('main2');
+	var myChart2 = echarts.init(chartDom2);
+	var option2;
+	option2 = {
+		tooltip: {
+			trigger: 'item'
+		},
+		legend: {
+			top: '5%',
+			left: 'center'
+		},
+		series: [
+			{
+				name: '数量',
+				type: 'pie',
+				radius: ['40%', '70%'],
+				avoidLabelOverlap: false,
+				label: {
+					show: false,
+					position: 'center'
+				},
+				emphasis: {
+					label: {
+						show: true,
+						fontSize: 40,
+						fontWeight: 'bold'
+					}
+				},
+				labelLine: {
+					show: false
+				},
+				data: [
+					{ value: 6, name: '博客量' },
+					{ value: 1, name: '简历数' },
+					{ value: 6, name: '职位数' },
+					{ value: 12, name: '用户' },
+					{ value: 3, name: '反馈' },
+					{ value: 2, name: '管理员' }
+				]
+			}
+		]
+	};
+
+	function updatePieChart(formatData) {
+		// 更新饼图的数据
+		option2.series[0].data = formatData
+
+		// 刷新图表
+		myChart2.setOption(option2);
+	}
+
+	// 获取饼图数据
+	function fetchPieData() {
+		$.ajax({
+			url: 'staticAll', // 替换为你的 API 地址
+			type: 'GET',
+			dataType: 'json',
+			success: function(dataFromDatabase) {
+				// 将数据库数据转换为图表所需的格式
+				let formatData = []
+				Object.keys(dataFromDatabase).forEach((item, index) => {
+					formatData.push({ value: dataFromDatabase[item], name: item })
+				})
+
+				updatePieChart(formatData)
+				// 更新柱状图并刷新
+				updateChart(newData);
+			},
+			error: function(xhr, status, error) {
+				console.error('从数据库获取数据失败:', error);
+			}
+		});
+	}
+	fetchPieData()
+
+	option2 && myChart2.setOption(option2);
+
+
+
+	// 折线图配置
+
+	var chartDom3 = document.getElementById('main3');
+	var myChart3 = echarts.init(chartDom3);
+	var option3;
+
+	option3 = {
+		xAxis: {
+			type: 'category',
+			data: ['简历数', '用户', '反馈', '博客量', '职位数', '管理员']
+		},
+		yAxis: {
+			type: 'value'
+		},
+		series: [
+			{
+				data: [6, 1, 6, 12, 3, 2],
+				type: 'line'
+			}
+		]
+	};
+
+	function updateFoldChart(Folddata) {
+		option3.series[0].data = Folddata;
+		myChart3.setOption(option3);
+	}
+
+	function fetchFoldData() {
+		$.ajax({
+			url: 'staticAll', // 替换为你的 API 地址
+			type: 'GET',
+			dataType: 'json',
+			success: function(dataFromDatabase) {
+				var newData = Object.values(dataFromDatabase);
+				updateFoldChart(newData);
+			},
+			error: function(xhr, status, error) {
+				console.error('从数据库获取数据失败:', error);
+			}
+		});
+	}
+
+	fetchFoldData();
+	myChart3.setOption(option3);
+
+</script>
+</body>
+</html>

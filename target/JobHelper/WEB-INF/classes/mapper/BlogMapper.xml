@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapper.BlogMapper" >
+  <resultMap id="BaseResultMap" type="com.entity.Blog" >
+    <id column="blog_id" property="blogId" jdbcType="INTEGER" />
+    <result column="blog_user" property="blogUser" jdbcType="VARCHAR" />
+    <result column="blog_category" property="blogCategory" jdbcType="VARCHAR" />
+    <result column="blog_title" property="blogTitle" jdbcType="VARCHAR" />
+    <result column="blog_date" property="blogDate" jdbcType="DATE" />
+    <result column="blog_context" property="blogContext" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from jh_blog
+    where blog_id = #{blogId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.entity.Blog" >
+    insert into jh_blog (blog_id, blog_user, blog_category, blog_title,
+      blog_context, blog_date)
+   values (#{blogId,jdbcType=INTEGER}, #{blogUser,jdbcType=VARCHAR}, #{blogCategory,jdbcType=VARCHAR}, #{blogTitle,jdbcType=VARCHAR},
+       #{blogContext,jdbcType=LONGVARCHAR}, #{blogDate,jdbcType=DATE})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.entity.Blog" >
+    update jh_blog
+    set blog_user = #{blogUser,jdbcType=VARCHAR},
+      blog_category = #{blogCategory,jdbcType=VARCHAR},
+      blog_title = #{blogTitle,jdbcType=VARCHAR},
+      blog_date = #{blogDate,jdbcType=DATE},
+      blog_context = #{blogContext,jdbcType=LONGVARCHAR}
+    where blog_id = #{blogId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select blog_id, blog_user, blog_category, blog_title,blog_date, blog_context
+    from jh_blog
+    where blog_id = #{blogId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select blog_id, blog_user, blog_category,blog_title, blog_date, blog_context
+    from jh_blog
+  </select>
+  <select id="selectSome" resultMap="BaseResultMap" >
+    select blog_id, blog_user, blog_category,blog_title, blog_date, blog_context
+    from jh_blog
+    LIMIT 3
+  </select>
+  <delete id="batchDelete" parameterType="list">
+    DELETE from jh_blog
+    <foreach collection="ids" item="blogId" separator="," open="where blog_id in(" close=")">
+      #{blogId}
+    </foreach>
+  </delete>
+  <select id="getByBlogCategory" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT * FROM jh_blog WHERE blog_category = #{blogCategory}
+  </select>
+  <select id="getByBlogCategoryAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT * FROM jh_blog
+  </select>
+  <select id="getByLike" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT *
+    FROM jh_blog
+    WHERE blog_title LIKE #{blogLike}
+       or blog_category LIKE #{blogLike}
+       or blog_context LIKE  #{blogLike}
+       or blog_user LIKE  #{blogLike}
+  </select>
+  <select id="getBlogCount" resultType="int">
+    SELECT COUNT(*) AS record FROM jh_blog;
+  </select>
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapper.CompanyMapper" >
+    <resultMap id="BaseResultMap" type="com.entity.Company" >
+        <id column="company_id" property="companyId" jdbcType="INTEGER" />
+        <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from jh_company
+        where company_id = #{companyId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.entity.Company" >
+        insert into jh_company (company_id, company_name)
+        values (#{companyId,jdbcType=INTEGER}, #{companyName,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.entity.Company" >
+        update jh_company
+        set company_name = #{companyName,jdbcType=VARCHAR}
+        where company_id = #{companyId,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select company_id, company_name
+        from jh_company
+        where company_id = #{companyId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select company_id, company_name
+        from jh_company
+    </select>
+    <select id="selectSome" resultMap="BaseResultMap" >
+        select company_id, company_name
+        from jh_company
+        LIMIT 3
+    </select>
+    <delete id="batchDelete" parameterType="list">
+        DELETE from jh_company
+        <foreach collection="ids" item="companyId" separator="," open="where company_id in(" close=")">
+            #{companyId}
+        </foreach>
+    </delete>
+    <select id="getByCategory" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT * FROM jh_company WHERE company_category = #{companyCategoty}
+    </select>
+</mapper>
