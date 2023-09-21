@@ -102,6 +102,7 @@
                                     <span th:case="趣味"><img th:src="@{/static/images/blog/blog-1.jpg}" alt=""></span>
                                 </a>
                             </div>
+<!--                            日期列-->
                             <div class="blog-text">
                                 <div class="blog-date pt-12">
                                     <span class="text-large block text-white"><span th:text="${#dates.format(blog.blogDate, 'dd')}"></span></span>
@@ -112,20 +113,54 @@
                                     <span class="pl-50 l-text"><i class="zmdi zmdi-favorite pr-8"></i>喜欢</span>
                                     <span class="pl-15 l-text"><i class="zmdi zmdi-comments pr-8"></i>评论</span>
                                 </div>
+<!--                                    标题与内容-->
                                 <h5 class="pt-42 mb-14 l-text"><p class="p1" th:text="${blog.blogTitle}"></h5>
                                 <p class="mb-25" th:text="${blog.blogContext}"></p>
                             </div>
                         </div>
+<!--                        评论区-->
                         <div class="tags-and-links fix pt-14 pb-12">
                             <div class="related-tag pull-left">
-                                <span class="mr-10">标签:</span>
-                                <ul class="tags">
-                                    <li><a href="#">新工作</a></li>
-                                    <li><a href="#">工作网站</a></li>
-                                    <li><a href="#">工作帮助</a></li>
-                                    <li><a href="#">工作邀请</a></li>
-                                </ul>
+                                <button style="float: right; display: inline" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                    <div class="mdi mdi-18px mdi-pencil">
+                                        进行点评
+                                    </div>
+                                </button>
                             </div>
+
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-pop-up-content ptb-60 pl-60 pr-60">
+                                                <div class="area-title text-center mb-43">
+                                                    <h2 class="pt-7 pb-7 pl-40 pr-40">发表讨论</h2>
+                                                </div>
+                                                    <form action="addComment" method="post">
+                                                    <div class="form-box">
+                                                        <textarea class="form-control smaller-textarea" id="observe" rows="4" name="observe" placeholder="您的内容..."></textarea>
+                                                    </div>
+                                                    <input type="hidden" name="userId" th:href="@{session.user.userId}">
+                                                    <input type="hidden" name="blogId" th:field="${blog.blogId}">
+                                                    <div class="text-center mt-10">
+                                                        <div>
+                                                            <button type="submit" class="text-uppercase">点击提交</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
                             <div class="social-links pull-right">
                                 <span>Share:</span>
                                 <a href="#"><i class="zmdi zmdi-facebook"></i></a>
@@ -136,44 +171,27 @@
                         </div>
 
 
-                        <div class="comments fix pt-55">
+                        <div class="comments job-post-area ptb-120 " >
                             <h4 class="title pb-8 mb-27">评论</h4>
 
+<!--                            <table>-->
+<!--                                <tbody>-->
+<!--                                <div class="single-job-post fix">-->
+<!--                                    <div class="fix pl-30 mt-29">-->
+<!--                                        <h5><a >匿名用户</a></h5>-->
+<!--                                        <h4 class="mb-5"><span th:text="${comment.observe}"></span></h4>-->
+<!--                                    </div>-->
+
+<!--                                </div>-->
+<!--                                </tbody>-->
+
+<!--                            </table>-->
+
                             <div class="single-comment fix mb-30">
-                                <div class="author-image">
-                                    <img alt="" th:src="@{/static/images/comment/1.jpg}">
-                                </div>
+
                                 <div class="comment-text fix">
                                     <div class="author-info">
-                                        <h4 class="mb-8"><a href="#">MD Abul Miya</a></h4>
-                                        <span class="reply"><a href="#">Reply</a></span>
-                                        <span class="comment-time">Posted on Jun 12, 2015 /</span>
-                                    </div>
-                                    <p class="mb-18">There are many variations of passages of Lorem Ipsum available, but
-                                        the majority have suffered aation in some form, by injected humour,</p>
-                                </div>
-                            </div>
-                            <div class="single-comment fix mb-30 ">
-                                <div class="author-image">
-                                    <img alt="" th:src="@{/static/images/comment/2.jpg}">
-                                </div>
-                                <div class="comment-text fix">
-                                    <div class="author-info">
-                                        <h4 class="mb-8"><a href="#">MD Gosebon</a></h4>
-                                        <span class="reply"><a href="#">Reply</a></span>
-                                        <span class="comment-time">Posted on Jun 12, 2015 /</span>
-                                    </div>
-                                    <p class="mb-18">There are many variations of passages of Lorem Ipsum available, but
-                                        the majority have suffered aation in some form, by injected humour,</p>
-                                </div>
-                            </div>
-                            <div class="single-comment fix mb-30">
-                                <div class="author-image">
-                                    <img alt="" th:src="@{/static/images/comment/3.jpg}">
-                                </div>
-                                <div class="comment-text fix">
-                                    <div class="author-info">
-                                        <h4 class="mb-8"><a href="#">MR Fazil lol</a></h4>
+                                        <h4 class="mb-8"><a href="#">匿名用户</a></h4>
                                         <span class="reply"><a href="#">Reply</a></span>
                                         <span class="comment-time">Posted on Jun 12, 2015 /</span>
                                     </div>
@@ -224,6 +242,9 @@
                 </div>
             </div>
         </div>
+
+
+
         <!--End of Blog Area-->
         <!--Start of Social Link Area-->
         <div class="social-link-area ptb-40 dark-blue-bg">
@@ -402,6 +423,12 @@
 <script th:src="@{/static/js/styleswitch.js}"></script>
 <script th:src="@{/static/js/waypoints.min.js}"></script>
 <script th:src="@{/static/js/main.js}"></script>
+<script>
+    // 获取隐藏字段的值
+    var blogId = document.querySelector('input[name="blogId"]').value;
 
+    // 输出到控制台
+    console.log("blogId: " + blogId);
+</script>
 </body>
 </html>

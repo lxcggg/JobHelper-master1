@@ -95,7 +95,7 @@ public class JobController {
         out.print("<script>alert('添加成功！');</script>");
         return "forward:/jobAdd";
     }
-
+//*****************************************************************************
 
     @PostMapping("/addJob")
     @ResponseBody
