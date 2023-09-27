@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapper.AnswerMapper" >
+    <resultMap id="BaseResultMap" type="com.entity.Answer" >
+        <id column="answer_id" property="answerId" jdbcType="INTEGER" />
+        <result column="title_name" property="titleName" jdbcType="VARCHAR" />
+        <result column="answer_one" property="answerOne" jdbcType="VARCHAR" />
+        <result column="answer_two" property="answerTwo" jdbcType="VARCHAR" />
+        <result column="answer_three" property="answerThree" jdbcType="VARCHAR" />
+        <result column="answer_four" property="answerFour" jdbcType="VARCHAR" />
+
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from jh_answer
+        where answer_id = #{answerId,jdbcType=INTEGER}
+    </delete>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select answer_id, title_name,answer_one,answer_two,answer_three,answer_four
+        from jh_answer
+        where answer_id = #{answerId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select answer_id, title_name, answer_one, answer_two, answer_three, answer_four
+        from jh_answer
+    </select>
+    <delete id="batchDelete" parameterType="list">
+        DELETE from jh_answer
+        <foreach collection="ids" item="answerId" separator="," open="where answer_id in(" close=")">
+            #{answerId}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapper.TitleMapper" >
+    <resultMap id="BaseResultMap" type="com.entity.Title" >
+        <id column="title_id" property="titleId" jdbcType="INTEGER" />
+        <result column="title_name" property="titleName" jdbcType="VARCHAR" />
+        <result column="title_state" property="titleState" jdbcType="VARCHAR" />
+        <result column="title_questionone" property="titleQuestionone" jdbcType="VARCHAR" />
+        <result column="title_questiontwo" property="titleQuestiontwo" jdbcType="VARCHAR" />
+        <result column="title_questionthree" property="titleQuestionthree" jdbcType="VARCHAR" />
+        <result column="title_questionfour" property="titleQuestionfour" jdbcType="VARCHAR" />
+
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from jh_title
+        where title_id = #{titleId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.entity.Title" >
+        insert into jh_title (title_id, title_name, title_state, title_questionone, title_questiontwo, title_questionthree, title_questionfour)
+        values (#{titleId,jdbcType=INTEGER}, #{titleName,jdbcType=VARCHAR}, #{titleState,jdbcType=VARCHAR}, #{titleQuestionone,jdbcType=VARCHAR}
+        , #{titleQuestiontwo,jdbcType=VARCHAR}, #{titleQuestionthree,jdbcType=VARCHAR}, #{titleQuestionfour,jdbcType=VARCHAR}
+        )
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.entity.Title" >
+       update jh_title
+set title_state = #{titleState,jdbcType=VARCHAR},
+    title_questionone = #{titleQuestionone,jdbcType=VARCHAR},
+    title_questiontwo = #{titleQuestiontwo,jdbcType=VARCHAR},
+    title_questionthree = #{titleQuestionthree,jdbcType=VARCHAR},
+    title_questionfour = #{titleQuestionfour,jdbcType=VARCHAR}
+where title_id = #{titleId,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select title_id, title_name, title_state,title_questionone,title_questiontwo,title_questionthree,title_questionfour
+        from jh_title
+        where title_id = #{titleId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select title_id, title_name, title_state, title_questionone, title_questiontwo, title_questionthree, title_questionfour
+        from jh_title
+    </select>
+    <select id="selectSome" resultMap="BaseResultMap" >
+        select title_id, title_name, title_state
+        from jh_title
+
+    </select>
+    <delete id="batchDelete" parameterType="list">
+        DELETE from jh_title
+        <foreach collection="ids" item="titleId" separator="," open="where title_id in(" close=")">
+            #{titleId}
+        </foreach>
+    </delete>
+    <select id="getByCategory" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT * FROM jh_title
+    </select>
+</mapper>
