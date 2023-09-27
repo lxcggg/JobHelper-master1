@@ -11,6 +11,8 @@
         delete from jh_user
         where user_id = #{userId,jdbcType=INTEGER}
     </delete>
+
+
     <insert id="insert" parameterType="com.entity.User" >
         insert into jh_user (user_id, user_name, user_password,
                              user_email)
@@ -51,6 +53,13 @@
             INNER JOIN jh_job jj on ujm.job_id = jj.job_id
         WHERE jh_user.user_id=#{userId}
     </select>
+    <select id="getUserCollect" parameterType="java.lang.Integer" resultMap="BaseResultMap1">
+        SELECT *
+        FROM jh_user
+            INNER JOIN jh_collect jc on jh_user.user_id = jc.user_id
+            INNER JOIN jh_job jj on jc.job_id = jj.job_id
+        WHERE jh_user.user_id=#{userId}
+    </select>
     <resultMap id="BaseResultMap1" type="com.entity.User">
         <id column="user_id" property="userId" jdbcType="INTEGER" />
         <result column="user_name" property="userName" jdbcType="VARCHAR" />
@@ -73,12 +82,27 @@
         insert into user_job_middle (user_id, job_id)
         values (#{userId},#{jobId});
     </insert>
+    <insert id="insertCollect" parameterType="com.entity.Collect">
+        insert into jh_collect (user_id, job_id)
+        values (#{userId},#{jobId});
+    </insert>
+
     <select id="getUJM" parameterType="com.entity.UJM" resultType="com.entity.UJM">
         SELECT user_id,job_id FROM user_job_middle WHERE user_id = #{userId} and job_id=#{jobId}
+    </select>
+    <select id="getCollect" parameterType="com.entity.Collect" resultType="com.entity.Collect">
+        SELECT user_id,job_id FROM jh_collect WHERE user_id = #{userId} and job_id=#{jobId}
     </select>
 
     <select id="getUserCount" resultType="int">
         SELECT COUNT(*) AS record FROM jh_user;
     </select>
-
+    <resultMap id="BaseResultMap2" type="com.entity.Collect">
+        <id column="user_id" property="userId" jdbcType="INTEGER" />
+            <id column="job_id" property="jobId" jdbcType="INTEGER" />
+    </resultMap>
+    <delete id="deletecollect" parameterType="java.lang.Integer" >
+        delete from jh_collect
+        where job_id = #{jobId}
+    </delete>
 </mapper>

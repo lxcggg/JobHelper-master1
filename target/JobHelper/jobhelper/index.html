@@ -102,7 +102,10 @@
                                     <li><a th:href="@{/blog}">博客</a></li>
                                     <li><a th:href="@{/contact}">联系我们</a></li>
                                     <li th:if="${session.user !=null}">
-                                        <a th:href="@{/resume(userId=${session.user.userId})}" target="_blank">我的简历</a>
+                                        <a th:href="@{/resume(userId=${session.user.userId})}" target="_self">我的简历</a>
+                                    </li>
+                                    <li th:if="${session.user !=null}">
+                                        <a th:href="@{/collect(userId=${session.user.userId})}" target="_self">我的收藏</a>
                                     </li>
                                     <!--/*@thymesVar id="user" type="com.entity.User"*/-->
                                     <div class="login-btn pt-36" th:if="${session.user} == null">

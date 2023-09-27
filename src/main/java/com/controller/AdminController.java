@@ -4,6 +4,7 @@ import com.entity.Admin;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.service.*;
+import com.service.impl.CompanyService;
 import com.util.Msg;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +33,18 @@ public class AdminController {
     private ContactService contactService;
     @Autowired
     private BlogService blogService;
+    @Autowired
+    private CompanyService companyService;
+
+//    @Autowired
+//    private TitleService titleService;
 
     @RequestMapping("/admin")
     public String admin(HttpServletRequest request) {
         request.getSession().setAttribute("admins", adminService.selectAll());
         request.getSession().setAttribute("users", userService.selectAll());
         request.getSession().setAttribute("jobs", jobService.selectAll());
+        request.getSession().setAttribute("companys", companyService.selectAll());
         request.getSession().setAttribute("resumes", resumeService.selectAll());
         request.getSession().setAttribute("contacts", contactService.selectAll());
         request.getSession().setAttribute("blogs", blogService.selectAll());
@@ -69,6 +76,9 @@ public class AdminController {
         return "manager/contact-list";
     }
 
+    @RequestMapping("commentManager")
+    public String commentManager(){ return "manager/comment-list"; }
+
     @RequestMapping("/userManager")
     public String userManager() {
         return "manager/user-list";
@@ -78,6 +88,14 @@ public class AdminController {
     public String adminManager() {
         return "manager/admin-list";
     }
+
+    @RequestMapping("/titleManager")
+    public String titleManager() {
+        return "manager/title-list";
+    }
+
+    @RequestMapping("/answerManager")
+    public String answerManager() { return "manager/answer-list"; }
 
     @RequestMapping("/changeAdmin")
     public String changeAdmin() {

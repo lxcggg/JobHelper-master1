@@ -1,5 +1,6 @@
 package com.service.impl;
 
+import com.entity.Collect;
 import com.entity.UJM;
 import com.entity.User;
 import com.mapper.UserMapper;
@@ -20,6 +21,11 @@ public class UseServiceImpl implements UserService {
     }
 
     @Override
+    public int deletecollect(Integer jobId){
+        return userMapper.deletecollect(jobId);
+    }
+
+    @Override
     public int insert(User record) {
         return userMapper.insert(record);
     }
@@ -35,8 +41,18 @@ public class UseServiceImpl implements UserService {
     }
 
     @Override
+    public int insertCollect(Collect collect) {
+        return userMapper.insertCollect(collect);
+    }
+
+    @Override
     public User getUserJob(Integer userId) {
         return userMapper.getUserJob(userId);
+    }
+
+    @Override
+    public User getUserCollect(Integer userId) {
+        return userMapper.getUserCollect(userId);
     }
 
     @Override
@@ -63,6 +79,10 @@ public class UseServiceImpl implements UserService {
     @Override
     public UJM getUJM(Integer userId, Integer jobId) {
         return userMapper.getUJM(userId,jobId);
+    }
+    @Override
+    public Collect getCollect(Integer userId, Integer jobId) {
+        return userMapper.getCollect(userId,jobId);
     }
 
     @Override

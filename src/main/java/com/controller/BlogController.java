@@ -1,11 +1,13 @@
 package com.controller;
 
 import com.entity.Blog;
+import com.entity.Comment;
 import com.entity.Job;
 import com.entity.User;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.service.BlogService;
+import com.service.CommentService;
 import com.util.Msg;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ import java.util.List;
 public class BlogController {
     @Autowired
     private BlogService blogService;
+    @Autowired
+    private CommentService commentService;
 
     @RequestMapping("/blog")
     public String blog() {
@@ -36,6 +40,9 @@ public class BlogController {
         Blog blog = blogService.selectByPrimaryKey(Integer.parseInt(request.getParameter("blogId")));
         //System.out.println(blog);
         mv.addObject("blog", blog);
+        List<Comment> commentList = commentService.getComments(Integer.parseInt(request.getParameter("blogId")));
+//        model.addAttribute("commentList", commentList);
+        mv.addObject("commentList", commentList);
         mv.setViewName("blog-details");
         return mv;
     }
@@ -172,6 +179,19 @@ public class BlogController {
             e.printStackTrace();
         }
         return Msg.success();
+
+
+
+        // 标题表    id      title     ......
+
+        // 问题表   id      标题id    问题     问题类型（单选，多选，输入框）   [ {"a": "1"} , {"b": "2"} ]
+
+        // 回答表   id     标题id    问题表id   回答内容    回答的用户   ......
+
+
+
+
+
     }
 
 }

@@ -6,7 +6,6 @@
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" type="image/x-icon" th:href="@{/static/images/favicon5.ico}">
-<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
 <link rel="stylesheet" th:href="@{/static/css/bootstrap.min.css}">
 <link rel="stylesheet" th:href="@{/static/css/core.css}">
 <link rel="stylesheet" th:href="@{/static/css/shortcode/shortcodes.css}">
@@ -43,7 +42,10 @@
                                     <li><a th:href="@{/blog}">博客</a></li>
                                     <li><a th:href="@{/contact}">联系我们</a></li>
                                     <li th:if="${session.user !=null}">
-                                        <a th:href="@{/resume(userId=${session.user.userId})}" target="_blank">我的简历</a>
+                                        <a th:href="@{/resume(userId=${session.user.userId})}" target="_self">我的简历</a>
+                                    </li>
+                                    <li th:if="${session.user !=null}">
+                                        <a th:href="@{/collect(userId=${session.user.userId})}" target="_self">我的收藏</a>
                                     </li>
                                     <!--/*@thymesVar id="user" type="com.entity.User"*/-->
                                     <div class="login-btn pt-36" th:if="${session.user} == null">
@@ -123,7 +125,11 @@
                                 <div class="mt-38">
                                     <a th:href="@{/}" class="button button-large-box lg-btn mr-20">返回</a>
                                     <span th:if="${session.user !=null}">
-                                        <a id="submitMe" class="button button-large-box lg-btn">投递简历</a>
+                                     <a id="submitMe" class="button button-large-box lg-btn">投递简历</a>
+                                         <a id="collectJob" class="button button-large-box lg-btn">收藏职位</a>
+                                    </span>
+                                    <span th:unless="${session.user !=null}">
+                                    <span style="color: red;">请先登录</span>
                                     </span>
                                 </div>
                             </div>
@@ -339,12 +345,36 @@
         $("#submitMe").removeClass("btn-danger").addClass(" button-large-box lg-btn disable").text("已投递");
     }
 
-/*    $(function () {
-        var attr = [[${session.user.jobs}]];
-        var job = [[${job}]];
-        var a = $.contain(job,attr);
-        console.log(a);
-    })*/
+
+
+    $(function () {
+        var userId = [[${session.user.userId}]];
+        var jobId = [[${job.jobId}]];
+        console.log(userId+jobId);
+        $("#collectJob").click(function () {
+            $.ajax({
+                url:getRootPath()+"collectJob?userId="+userId+"&jobId="+jobId,
+                type:"GET",
+                success:function (result) {
+                    if (result.code==100){
+                        changeColor();
+                    }else {
+                        console.log(result)
+                    }
+                }
+            })
+        })
+    });
+
+    function changeColor() {
+        $("#collectJob").removeClass("btn-danger").addClass(" button-large-box lg-btn disable").text("已收藏");
+    }
+    // $(function () {
+    //     var attr = [[${session.user.jobs}]];
+    //     var job = [[${job}]];
+    //     var a = $.contain(job,attr);
+    //     console.log(a);
+    // })
 </script>
 </body>
 </html>

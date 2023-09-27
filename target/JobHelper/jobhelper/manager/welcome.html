@@ -118,6 +118,10 @@
 			}
 		});
 	}
+	// 在适当的时机调用 fetchData() 方法来获取最新数据并更新图表
+	fetchData();
+	option && myChart.setOption(option);
+
 
 	// 初始化柱状图配置
 	option = {
@@ -157,10 +161,7 @@
 		]
 	};
 
-	// 在适当的时机调用 fetchData() 方法来获取最新数据并更新图表
-	fetchData();
-	// 刷新图表
-	myChart.setOption(option);
+
 
 	// 饼图配置
 	var chartDom2 = document.getElementById('main2');
@@ -195,12 +196,12 @@
 					show: false
 				},
 				data: [
-					{ value: 6, name: '博客量' },
-					{ value: 1, name: '简历数' },
-					{ value: 6, name: '职位数' },
-					{ value: 12, name: '用户' },
-					{ value: 3, name: '反馈' },
-					{ value: 2, name: '管理员' }
+					{ value: 0, name: '博客量' },
+					{ value: 0, name: '简历数' },
+					{ value: 0, name: '职位数' },
+					{ value: 0, name: '用户' },
+					{ value: 0, name: '反馈' },
+					{ value: 0, name: '管理员' }
 				]
 			}
 		]
@@ -208,7 +209,7 @@
 
 	function updatePieChart(formatData) {
 		// 更新饼图的数据
-		option2.series[0].data = formatData
+		option2.series[0].data = formatData;
 
 		// 刷新图表
 		myChart2.setOption(option2);
@@ -217,26 +218,27 @@
 	// 获取饼图数据
 	function fetchPieData() {
 		$.ajax({
-			url: 'staticAll', // 替换为你的 API 地址
+			url: 'staticAll', // 替换为您的 API 地址
 			type: 'GET',
 			dataType: 'json',
 			success: function(dataFromDatabase) {
 				// 将数据库数据转换为图表所需的格式
-				let formatData = []
+				let formatData = [];
 				Object.keys(dataFromDatabase).forEach((item, index) => {
-					formatData.push({ value: dataFromDatabase[item], name: item })
-				})
+					formatData.push({ value: dataFromDatabase[item], name: item });
+				});
 
-				updatePieChart(formatData)
+				updatePieChart(formatData);
 				// 更新柱状图并刷新
-				updateChart(newData);
+				// TODO: 替换为您正确的柱状图更新代码
+				updateChart(formatData);
 			},
 			error: function(xhr, status, error) {
 				console.error('从数据库获取数据失败:', error);
 			}
 		});
 	}
-	fetchPieData()
+	fetchPieData();
 
 	option2 && myChart2.setOption(option2);
 
@@ -258,7 +260,7 @@
 		},
 		series: [
 			{
-				data: [6, 1, 6, 12, 3, 2],
+				data: [0, 0, 0, 0,0,0],
 				type: 'line'
 			}
 		]

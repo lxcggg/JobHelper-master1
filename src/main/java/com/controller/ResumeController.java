@@ -59,6 +59,13 @@ public class ResumeController {
         return "resume";
     }
 
+
+
+
+    //    *******************************************************88
+
+
+
     @RequestMapping("/manageResume")
     @ResponseBody
     public Msg getResumes(@RequestParam(value = "pn", defaultValue = "1") Integer pn) {
@@ -72,6 +79,7 @@ public class ResumeController {
         PageInfo page = new PageInfo(resumes, 3);
         return Msg.success().add("pageInfo", page);
     }
+
 
     @RequestMapping("/addResume")
     @ResponseBody

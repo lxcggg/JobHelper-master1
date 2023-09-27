@@ -1,9 +1,6 @@
 package com.controller;
 
-import com.entity.Admin;
-import com.entity.Resume;
-import com.entity.UJM;
-import com.entity.User;
+import com.entity.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.service.AdminService;
@@ -84,9 +81,32 @@ public class UserController {
         request.getSession().setAttribute("user",user);
         return "info";
     }
+
+    @RequestMapping("/collectJob")
+    @ResponseBody
+    public Msg collectJob(@RequestParam("userId")Integer userId,@RequestParam("jobId")Integer jobId) {
+        if (userService.getCollect(userId,jobId)==null){
+            Collect collect = new Collect();
+            collect.setUserId(userId);
+            collect.setJobId(jobId);
+            userService.insertCollect(collect);
+            return Msg.success();
+        }else {
+            return Msg.fail();
+        }
+    }
+
+    @RequestMapping("/collect")
+    public String collect(HttpServletRequest request) {
+        Integer userId = ((User)request.getSession().getAttribute("user")).getUserId();
+        User user = userService.getUserCollect(userId);
+        request.getSession().setAttribute("user",user);
+        return "collect-board";
+    }
+
     @RequestMapping("/logout")
-    public String adminLogout(HttpServletRequest request) {
-        request.getSession().invalidate();
+    public String adminLogout(HttpSession session) {
+        session.removeAttribute("user"); // 替换 "user" 为您要清除的会话属性名称
         return "forward:/";
     }
 
@@ -175,5 +195,15 @@ public class UserController {
         return Msg.success();
     }
 
-
+    @RequestMapping("/deletecollect")
+    @ResponseBody
+    public Msg deletecollect(Integer jobId) {
+        int i = userService.deletecollect(jobId);
+        System.out.println(i+"-----------"+jobId);
+        if (userService.deletecollect(jobId) > 0) {
+            return Msg.success();
+        } else {
+            return Msg.fail();
+        }
+    }
 }

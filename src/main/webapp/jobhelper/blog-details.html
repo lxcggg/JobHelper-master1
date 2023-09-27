@@ -44,7 +44,10 @@
                                     <li><a th:href="@{/blog}">博客</a></li>
                                     <li><a th:href="@{/contact}">联系我们</a></li>
                                     <li th:if="${session.user !=null}">
-                                        <a th:href="@{/resume(userId=${session.user.userId})}" target="_blank">我的简历</a>
+                                        <a th:href="@{/resume(userId=${session.user.userId})}" target="_self">我的简历</a>
+                                    </li>
+                                    <li th:if="${session.user !=null}">
+                                        <a th:href="@{/collect(userId=${session.user.userId})}" target="_self">我的收藏</a>
                                     </li>
                                     <!--/*@thymesVar id="user" type="com.entity.User"*/-->
                                     <div class="login-btn pt-36" th:if="${session.user} == null">
@@ -121,11 +124,13 @@
 <!--                        评论区-->
                         <div class="tags-and-links fix pt-14 pb-12">
                             <div class="related-tag pull-left">
+                                <div class="login-btn " th:if="${session.user != null}">
                                 <button style="float: right; display: inline" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                     <div class="mdi mdi-18px mdi-pencil">
                                         进行点评
                                     </div>
                                 </button>
+                                </div>
                             </div>
 
                             <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
@@ -171,34 +176,33 @@
                         </div>
 
 
-                        <div class="comments job-post-area ptb-120 " >
+                        <div class="comments job-post-area ptb-30 " >
                             <h4 class="title pb-8 mb-27">评论</h4>
 
-<!--                            <table>-->
-<!--                                <tbody>-->
-<!--                                <div class="single-job-post fix">-->
-<!--                                    <div class="fix pl-30 mt-29">-->
-<!--                                        <h5><a >匿名用户</a></h5>-->
-<!--                                        <h4 class="mb-5"><span th:text="${comment.observe}"></span></h4>-->
-<!--                                    </div>-->
-
-<!--                                </div>-->
-<!--                                </tbody>-->
-
-<!--                            </table>-->
-
-                            <div class="single-comment fix mb-30">
-
-                                <div class="comment-text fix">
-                                    <div class="author-info">
-                                        <h4 class="mb-8"><a href="#">匿名用户</a></h4>
-                                        <span class="reply"><a href="#">Reply</a></span>
-                                        <span class="comment-time">Posted on Jun 12, 2015 /</span>
+                            <div class="comments">
+                                <div class="single-comment fix mb-30" th:each="comment : ${commentList}">
+                                    <div class="comment-text fix">
+                                        <div class="author-info">
+                                            <h4 class="mb-8">匿名用户</h4>
+                                            <span class="reply"><a href="#">Reply</a></span>
+                                        </div>
+                                        <p class="mb-18" th:text="${comment.observe}"></p>
                                     </div>
-                                    <p class="mb-18">There are many variations of passages of Lorem Ipsum available, but
-                                        the majority have suffered aation in some form, by injected humour,</p>
                                 </div>
                             </div>
+
+<!--                            <div class="single-comment fix mb-30">-->
+
+<!--                                <div class="comment-text fix">-->
+<!--                                    <div class="author-info">-->
+<!--                                        <h4 class="mb-8"><a href="#">匿名用户</a></h4>-->
+<!--                                        <span class="reply"><a href="#">Reply</a></span>-->
+<!--                                        <span class="comment-time">Posted on Jun 12, 2015 /</span>-->
+<!--                                    </div>-->
+<!--                                    <p class="mb-18">There are many variations of passages of Lorem Ipsum available, but-->
+<!--                                        the majority have suffered aation in some form, by injected humour,</p>-->
+<!--                                </div>-->
+<!--                            </div>-->
                         </div>
 
 

@@ -6,7 +6,6 @@
         <result column="blog_id" property="blogId" jdbcType="VARCHAR" />
         <result column="user_id" property="userID" jdbcType="VARCHAR" />
         <result column="observe" property="observe" jdbcType="VARCHAR" />
-
     </resultMap>
 
     <insert id="insert" parameterType="com.entity.Comment" >
@@ -15,4 +14,11 @@
         values (#{commentId,jdbcType=INTEGER}, #{blogId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
                 #{observe,jdbcType=VARCHAR})
     </insert>
+    <select id="getComments" resultMap="BaseResultMap">
+        SELECT observe
+        FROM jh_comment
+        WHERE blog_id = #{blogId}
+    </select>
+<!--    ************************-->
+
 </mapper>

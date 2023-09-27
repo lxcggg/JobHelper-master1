@@ -60,13 +60,24 @@
         <property name="characterEncoding" value="UTF-8"/>
     </bean>
 
+
+    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:application.properties</value>
+                <!-- 可以添加其他属性文件路径 -->
+            </list>
+        </property>
+    </bean>
+
+
     <!--其他。。转换器，文件上传等等-->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <!-- 设定默认编码 -->
         <property name="defaultEncoding" value="UTF-8" />
-        <!-- 设定文件上传的最大值5MB，5*1024*1024 -->
-        <property name="maxUploadSize" value="5242880" />
-        <property name="maxInMemorySize" value="4096" />
+        <!-- 设定文件上传的最大值500MB，500*1024*1024 -->
+        <property name="maxUploadSize" value="524288000" />
+        <property name="maxInMemorySize" value="409600" />
     </bean>
 
 </beans>
