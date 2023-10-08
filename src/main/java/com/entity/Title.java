@@ -1,6 +1,10 @@
 package com.entity;
 
-public class Title {
+import java.io.Serializable;
+
+public class Title implements Serializable {
+    private static final long serialVersionUID = 4957683856877445307L;
+
     private Integer titleId;
 
     private String titleName;

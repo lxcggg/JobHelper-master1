@@ -55,4 +55,14 @@ public class TitleServiceImpl implements TitleService {
         return titleMapper.getByCategory(titleCategory);
     }
 
+    @Override
+    public List<Title> selectTitle(){
+        return titleMapper.selectTitle();
+    }
+
+
+    @Override
+    public Integer selectState(Integer titleId){
+        return titleMapper.selectState(titleId);
+    }
 }

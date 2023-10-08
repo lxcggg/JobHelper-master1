@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.entity.Answer" >
         <id column="answer_id" property="answerId" jdbcType="INTEGER" />
         <result column="title_name" property="titleName" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
         <result column="answer_one" property="answerOne" jdbcType="VARCHAR" />
         <result column="answer_two" property="answerTwo" jdbcType="VARCHAR" />
         <result column="answer_three" property="answerThree" jdbcType="VARCHAR" />
@@ -15,12 +16,12 @@
         where answer_id = #{answerId,jdbcType=INTEGER}
     </delete>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-        select answer_id, title_name,answer_one,answer_two,answer_three,answer_four
+        select answer_id, title_name,user_name,answer_one,answer_two,answer_three,answer_four
         from jh_answer
         where answer_id = #{answerId,jdbcType=INTEGER}
     </select>
     <select id="selectAll" resultMap="BaseResultMap" >
-        select answer_id, title_name, answer_one, answer_two, answer_three, answer_four
+        select answer_id, title_name, user_name, answer_one, answer_two, answer_three, answer_four
         from jh_answer
     </select>
     <delete id="batchDelete" parameterType="list">
@@ -29,5 +30,10 @@
             #{answerId}
         </foreach>
     </delete>
+    <insert id="insert" parameterType="com.entity.Answer" >
+        insert into jh_answer (user_name,answer_one, answer_two, answer_three, answer_four, title_name)
+        values (#{userName,jdbcType=INTEGER},#{answerOne,jdbcType=INTEGER}, #{answerTwo,jdbcType=VARCHAR}, #{answerThree,jdbcType=VARCHAR}, #{answerFour,jdbcType=VARCHAR}, #{titleName,jdbcType=VARCHAR}
+        )
+    </insert>
 
 </mapper>

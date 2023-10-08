@@ -1,27 +1,41 @@
 package com.controller;
 
 import com.entity.Resume;
+import com.entity.ResumeVO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.service.ResumeService;
 import com.service.UserService;
+import com.util.FileUpload;
 import com.util.Msg;
 import net.sf.json.JSONArray;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class ResumeController {
+
+    @Value("${reggie.path}")
+    private String absPath;
+
+    @Autowired
+    private FileUpload fileUpload;
+
     @Autowired
     private ResumeService resumeService;
     @Autowired
@@ -45,18 +59,54 @@ public class ResumeController {
         return mv;
     }
 
-    @RequestMapping("/resumeSave")
-    public String resumeSave(Resume resume,Model model) {
-        //System.out.println("页面传值"+resume);
+    @RequestMapping(value = "/resumeSave", method = RequestMethod.POST)
+    public String resumeSave(ResumeVO resumeVO, Model model) {
+        System.out.println("data:::::" + resumeVO.toString());
+
+        Resume resume = new Resume();
+
+        BeanUtils.copyProperties(resumeVO, resume);
+
+        if (!resumeVO.getResumeImage().isEmpty()) {
+            // 上传到本地
+            String uploadImageName = fileUpload.upload(resumeVO.getResumeImage());
+            resume.setResumePic(uploadImageName);
+        }
+
+        System.out.println("页面传值"+resume.toString());
         if (resumeService.selectByPrimaryKey(resume.getResumeId())!=null){
             resumeService.updateByPrimaryKey(resume);
             Resume resume1 = resumeService.selectByPrimaryKey(resume.getResumeId());
             //System.out.println("更新后："+resume1);
             model.addAttribute("resume",resume1);
-            return "resume";
+            return "redirect:/resume?userId=" + resume.getUserId();
         }
         resumeService.insert(resume);
-        return "resume";
+        return "redirect:/resume?userId=" + resume.getUserId();
+    }
+
+    @ResponseBody
+    @RequestMapping("/showImg/{fileName:.+}")
+    public void showImg(@PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
+
+        System.out.println(fileName + "++++++++++++++++++++++");
+
+        String RealPath = absPath +  "/" + fileName;
+
+        // 新建文件 路径就是 D:/user photo/xxxxx.jpg
+        File imgFile = new File(RealPath);
+
+        // 转换为输入流
+        FileInputStream inputStream = new FileInputStream(imgFile);
+
+        ServletOutputStream outputStream = response.getOutputStream();
+
+        byte[] buffer = new byte[1024];
+
+        while (inputStream.read(buffer) != -1) {
+            outputStream.write(buffer);
+        }
+        outputStream.flush();
     }
 
 

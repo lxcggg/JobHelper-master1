@@ -43,4 +43,8 @@ public interface TitleMapper {
     void batchDelete(@Param("ids") List<Integer> ids);
 
     List<Title> getByCategory(String titleCategory);
+
+    List<Title> selectTitle();
+
+    Integer selectState(Integer titleId);
 }

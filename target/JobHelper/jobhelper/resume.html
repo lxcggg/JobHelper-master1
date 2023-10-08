@@ -6,7 +6,6 @@
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" type="image/x-icon" th:href="@{/static/images/favicon5.ico}">
-<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
 <link rel="stylesheet" th:href="@{/static/css/bootstrap.min.css}">
 <link rel="stylesheet" th:href="@{/static/css/core.css}">
 <link rel="stylesheet" th:href="@{/static/css/shortcode/shortcodes.css}">
@@ -14,7 +13,9 @@
 <link rel="stylesheet" th:href="@{/static/css/style.css}">
 <link rel="stylesheet" th:href="@{/static/css/plugins/color.css}">
 <link rel="stylesheet" th:href="@{/static/css/responsive.css}">
-<script th:src="@{/static/js/vendor/modernizr-2.8.3.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/lib/Hui-iconfont/1.0.8/iconfont.css}"/>
+
+    <script th:src="@{/static/js/vendor/modernizr-2.8.3.min.js}"></script>
         <style>
             .scroll{height:200px;overflow:auto;overflow-x:hidden;}
 
@@ -42,12 +43,14 @@
                                             <!--                                    <li><a th:href="@{/register}">注册新账号</a></li>-->
                                             <li><a th:href="@{/blog}">博客</a></li>
                                             <li><a th:href="@{/contact}">联系我们</a></li>
+
                                             <li th:if="${session.user !=null}">
                                                 <a th:href="@{/resume(userId=${session.user.userId})}" target="_self">我的简历</a>
                                             </li>
                                             <li th:if="${session.user !=null}">
                                                 <a th:href="@{/collect(userId=${session.user.userId})}" target="_self">我的收藏</a>
                                             </li>
+
                                             <!--/*@thymesVar id="user" type="com.entity.User"*/-->
                                             <div class="login-btn pt-36" th:if="${session.user} == null">
                                                 <a href="#" data-toggle="modal" data-target="#productModal" >登录</a>
@@ -94,22 +97,34 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
-                                <form th:action="@{/resumeSave}" method="post">
+                                <form th:action="@{/resumeSave}" method="post" enctype="multipart/form-data">
                                     <div class="single-job-content">
                                         <div class="title uppercase pt-50 pb-38"><span class="lg">基本信息</span></div>
                                         <div class="single-job-form">
                                             <div class="single-info mb-14 fix">
-                                                <label for="photo" class="uppercase pull-left m-0">照片(点击空白处上传)</label>
-                                                <div style="height: 108px; " class="photo-uploader fix pull-left" id="fileupload" th:if="${resume==null}">
-                                                    <input type="file" id="photo" name="resumePic"  onchange="showPreview(this)" >
-                                                        <img id="portrait" src="" style="display:none; width: 192px; height: 108px;" />
+                                                <label for="photo" class="uppercase pull-left m-0">
+                                                    照片点击空白处上传
+                                                    (仅可上传一次)
+                                                </label>
+                                                <div style="height: 128px; " class="photo-uploader fix pull-left" id="fileupload" th:if="${resume==null}">
+                                                    <input type="file" id="photo" name="resumeImage"  onchange="showPreview(this)" >
+                                                    <img id="portrait" src="" style="display:none; width: 192px; height: 128px;" />
                                                 </div>
-                                                <div style="height: 108px; " class="photo-uploader fix pull-left"  th:if="${resume!=null}">
-                                                    <input type="hidden" name="resumePic" th:value="${resume.resumePic}" >
-                                                        <img  th:src="|/pic/${resume.resumePic}|" style=" width: 192px; height: 108px;" />
+                                                <div style="height: 128px; " class="photo-uploader fix pull-left"  th:if="${resume!=null}">
+                                                    <input type="hidden" name="resumeImage" th:value="${resume.resumePic}" >
+                                                        <img  th:src="|/showImg/${resume.resumePic}|" style=" width: 192px; height: 128px;" />
                                                 </div>
 
                                             </div>
+<!--                                            <div class="single-info mb-14 fix">-->
+<!--                                                <label for="hiddenFile1">用户图片上传</label>-->
+<!--                                                <form id="myFormup" method="post" action="/common/upload" enctype="multipart/form-data">-->
+<!--                                                    <input id="hiddenFile1" name="file" type="file" accept="image/*" style="display: none;">-->
+<!--                                                    <label for="hiddenFile1" class="btn btn-default" style="width: 192px;">选择文件</label>-->
+<!--                                                    <input type="submit" value="提交" class="btn btn-default" style="width: 192px;">-->
+<!--                                                </form>-->
+<!--                                                <img id="imageContainerup" src="" style="display: none; width: 192px; height: 108px;">-->
+<!--                                            </div>-->
                                             <div class="single-info">
                                                 <label for="name" class="uppercase pull-left m-0">姓名</label>
                                                 <div class="form-box fix" th:if="${resume ==null}">
@@ -433,6 +448,62 @@
             </div>
         </div>
 
+
+        <!--调查问卷-->
+        <div class="modal fade" id="answerModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-pop-up-content pt-60 pb-60 pl-60 pr-60">
+                            <div class="area-title text-center mb-40" th:each="title:${title}">
+                                <h2 class="pt-7 pb-7 pl-40 pr-40" th:text="${title.titleName}"></h2>
+                            </div>
+                            <form th:action="@{/answerSave}" method="post">
+                                <fieldset th:each="title : ${title}">
+                                    <input type="hidden" name="titleName" th:value="${title.titleName}" />
+
+                                    <fieldset>
+                                        <div class="form-box mb-30">
+                                            <div class="question-label mb-10" style="color: black" th:text="${title.titleQuestionone}"></div>
+                                            <input type="text" name="answerOne" placeholder="回答" class="form-control" >
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-box mb-30">
+                                            <div class="question-label mb-10" style="color: black" th:text="${title.titleQuestiontwo}"></div>
+                                            <input type="text" name="answerTwo" placeholder="回答" class="form-control" >
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-box mb-30">
+                                            <div class="question-label mb-10" style="color: black" th:text="${title.titleQuestionthree}"></div>
+                                            <input type="text" name="answerThree" placeholder="回答" class="form-control" >
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-box mb-30">
+                                            <div class="question-label mb-10" style="color: black" th:text="${title.titleQuestionfour}"></div>
+                                            <input type="text" name="answerFour" placeholder="回答" class="form-control" >
+                                        </div>
+                                    </fieldset>
+                                </fieldset>
+                                <div th:unless="${title != null}" class="text-center" style="color: black">
+                                    <h1>当前没有问卷向您发送</h1>
+                                </div>
+                                <div th:if="${title != null}" class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-block">提交</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 <!--End of Login Form-->
 <!-- jquery latest version
 ========================================================= -->
@@ -446,22 +517,70 @@
 <script th:src="@{/static/js/waypoints.min.js}"></script>
 <script th:src="@{/static/js/main.js}"></script>
 
-        <!--show picture-->
+<!--        show picture-->
         <script type="text/javascript">
             function showPreview(source) {
                 var file = source.files[0];
-                if(window.FileReader) {
+                if (window.FileReader) {
                     var fr = new FileReader();
-                    console.log(fr);
                     var portrait = document.getElementById('portrait');
+
                     fr.onloadend = function(e) {
                         portrait.src = e.target.result;
                     };
+
+                    fr.onerror = function(e) {
+                        console.log('文件读取错误');
+                    };
+
                     fr.readAsDataURL(file);
                     portrait.style.display = 'block';
+                } else {
+                    console.log('浏览器不支持 File API');
                 }
-            }
-        </script>
 
+            }
+
+        </script>
+<!--        <script>-->
+<!--            document.getElementById("myForm").addEventListener("submit", function(event) {-->
+<!--                event.preventDefault(); // 阻止默认提交行为-->
+<!--                console.log(123)-->
+<!--                // 异步提交表单数据-->
+<!--                var formData = new FormData(this);-->
+<!--                var xhr = new XMLHttpRequest();-->
+<!--                xhr.open("POST", this.action);-->
+<!--                xhr.onload = function() {-->
+<!--                    if (xhr.status === 200) {-->
+
+<!--                        handleAvatarSuccess1(xhr.response);-->
+<!--                        // location.reload(); // 刷新页面-->
+<!--                    } else {-->
+<!--                        console.log("提交失败");-->
+<!--                    }-->
+<!--                };-->
+<!--                xhr.send(formData);-->
+
+<!--            });-->
+
+
+<!--            function handleAvatarSuccess1(response) {-->
+<!--                var data = JSON.parse(response).data;-->
+
+<!--                // 拼接down接口预览-->
+<!--                var imageUrl = "/download?name=" + data;-->
+
+<!--                // 获取 imageContainer 元素-->
+<!--                var container = document.getElementById("imageContainer");-->
+
+<!--                // 设置图片路径-->
+<!--                container.src = imageUrl;-->
+<!--                console.log(imageUrl)-->
+
+
+<!--                window.generatedValue = data; // 存储在全局变量中-->
+<!--            }-->
+
+<!--        </script>-->
     </body>
 </html>

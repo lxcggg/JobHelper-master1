@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--图标-->
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/static/images/favicon5.ico}">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/static/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/static/css/core.css}">
     <!-- 元素样式 -->
@@ -18,6 +17,7 @@
     <link rel="stylesheet" th:href="@{/static/css/style.css}">
     <link rel="stylesheet" th:href="@{/static/css/plugins/color.css}">
     <link rel="stylesheet" th:href="@{/static/css/responsive.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/lib/Hui-iconfont/1.0.8/iconfont.css}"/>
     <!-- Modernizr JS -->
     <script th:src="@{/static/js/vendor/modernizr-2.8.3.min.js}"></script>
 
@@ -101,6 +101,14 @@
 <!--                                    <li><a th:href="@{/register}">注册新账号</a></li>-->
                                     <li><a th:href="@{/blog}">博客</a></li>
                                     <li><a th:href="@{/contact}">联系我们</a></li>
+                                    <li th:if="${session.user !=null}">
+
+                                        <a href="#" title="消息" id="infoButton">
+                                            <span class="badge badge-danger"></span>
+                                            <i class="Hui-iconfont" style="font-size:18px">&#xe68a;</i>
+                                        </a>
+
+                                    </li>
                                     <li th:if="${session.user !=null}">
                                         <a th:href="@{/resume(userId=${session.user.userId})}" target="_self">我的简历</a>
                                     </li>
@@ -569,9 +577,61 @@
     </div>
 </div>
 
+<!--调查问卷-->
+<div class="modal fade" id="answerModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-pop-up-content pt-60 pb-60 pl-60 pr-60">
+                    <div class="area-title text-center mb-40" th:each="title:${title}">
+                        <h2 class="pt-7 pb-7 pl-40 pr-40" th:text="${title.titleName}"></h2>
+                    </div>
+                    <form th:action="@{/answerSave}" method="post">
+                        <fieldset th:each="title : ${title}">
+                            <input type="hidden" name="titleName" th:value="${title.titleName}" />
 
-
-
+                            <fieldset>
+                                <div class="form-box mb-30">
+                                    <div class="question-label mb-10" style="color: black" th:text="${title.titleQuestionone}"></div>
+                                    <input type="text" name="answerOne" placeholder="回答" class="form-control" >
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-box mb-30">
+                                    <div class="question-label mb-10" style="color: black" th:text="${title.titleQuestiontwo}"></div>
+                                    <input type="text" name="answerTwo" placeholder="回答" class="form-control" >
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-box mb-30">
+                                    <div class="question-label mb-10" style="color: black" th:text="${title.titleQuestionthree}"></div>
+                                    <input type="text" name="answerThree" placeholder="回答" class="form-control" >
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-box mb-30">
+                                    <div class="question-label mb-10" style="color: black" th:text="${title.titleQuestionfour}"></div>
+                                    <input type="text" name="answerFour" placeholder="回答" class="form-control" >
+                                </div>
+                            </fieldset>
+                        </fieldset>
+                        <div th:unless="${title != null}" class="text-center" style="color: black">
+                            <h1>当前没有问卷向您发送</h1>
+                        </div>
+                        <div th:if="${title != null}" class="text-center">
+                            <button type="submit" class="btn btn-primary btn-block">提交</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!--End of Login Form-->
 
 
@@ -587,7 +647,16 @@
 <script th:src="@{/static/js/main.js}"></script>
 <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
 <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+<script type="text/javascript">
+    // 获取信息按钮元素
+    var infoButton = document.getElementById("infoButton");
 
+    // 监听信息按钮的点击事件
+    infoButton.addEventListener("click", function() {
+        // 显示模态框
+        $('#answerModal').modal('show');
+    });
+</script>
 
 
 

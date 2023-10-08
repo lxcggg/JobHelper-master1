@@ -2,6 +2,8 @@ package com.controller;
 
 import com.entity.Answer;
 
+import com.entity.Title;
+import com.entity.User;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.service.AnswerService;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
@@ -148,4 +151,26 @@ public class AnswerController {
         }
         return Msg.success();
     }
+
+    @PostMapping("/answerSave")
+    public String answerSave(HttpServletRequest request, HttpSession session) throws ParseException {
+        Answer answer = new Answer();
+        answer.setAnswerOne(request.getParameter("answerOne"));
+        answer.setAnswerTwo(request.getParameter("answerTwo"));
+        answer.setAnswerThree(request.getParameter("answerThree"));
+        answer.setAnswerFour(request.getParameter("answerFour"));
+        answer.setTitleName(request.getParameter("titleName"));
+
+        User user = (User) session.getAttribute("user");
+        answer.setUserName(user.getUserName()); // 设置Answer实体的userName字段为session中的user.userName值
+
+        int i = answerService.insert(answer);
+
+        if (i > 0) {
+            return "index"; // 使用重定向跳转到index.html页面
+        }
+
+        return "404"; // 返回空字符串或其他错误页面
+    }
+
 }

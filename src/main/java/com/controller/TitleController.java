@@ -1,7 +1,7 @@
 package com.controller;
 
 
-import com.entity.Title;
+import com.entity.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.service.TitleService;
@@ -166,4 +166,7 @@ public class TitleController {
         }
         return Msg.success();
     }
-}
+
+
+
+    }

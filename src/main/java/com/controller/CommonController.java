@@ -1,13 +1,7 @@
 package com.controller;
 
-import com.entity.Blog;
-import com.entity.Job;
-import com.entity.Resume;
-import com.entity.User;
-import com.service.BlogService;
-import com.service.JobService;
-import com.service.ResumeService;
-import com.service.UserService;
+import com.entity.*;
+import com.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +11,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import java.util.List;
 
 @Controller
-@SessionAttributes({"jobs", "jobs1","users", "resumes", "blogs","blogs1"})
+@SessionAttributes({"jobs", "jobs1","users", "resumes", "blogs","blogs1","title"})
 public class CommonController {
 
     @Autowired
@@ -29,6 +23,9 @@ public class CommonController {
     @Autowired
     private BlogService blogService;
 
+    @Autowired
+    private TitleService titleService;
+
     @RequestMapping("/")
     public String index(Model model){
         List<Job> jobs = jobService.selectAll();
@@ -37,12 +34,21 @@ public class CommonController {
         List<Resume> resumes = resumeService.selectAll();
         List<Blog> blogs = blogService.selectAll();
         List<Blog> blogs1 = blogService.selectSome();
+
+        List<Title> title = titleService.selectTitle();
+
+
+
         model.addAttribute("jobs",jobs);
         model.addAttribute("users",users);
         model.addAttribute("resumes",resumes);
         model.addAttribute("blogs",blogs);
         model.addAttribute("blogs1",blogs1);
         model.addAttribute("jobs1",jobs1);
+
+        model.addAttribute("title",title);
+
+//        System.out.println(title);
         return "index";
     }
 

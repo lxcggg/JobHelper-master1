@@ -14,6 +14,8 @@
     <link rel="stylesheet" th:href="@{/static/css/style.css}">
     <link rel="stylesheet" th:href="@{/static/css/plugins/color.css}">
     <link rel="stylesheet" th:href="@{/static/css/responsive.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/lib/Hui-iconfont/1.0.8/iconfont.css}"/>
+
     <script th:src="@{/static/js/vendor/modernizr-2.8.3.min.js}"></script>
 </head>
     <body>
@@ -35,12 +37,14 @@
                                             <!--                                    <li><a th:href="@{/register}">注册新账号</a></li>-->
                                             <li><a th:href="@{/blog}">博客</a></li>
                                             <li><a th:href="@{/contact}">联系我们</a></li>
+
                                             <li th:if="${session.user !=null}">
                                                 <a th:href="@{/resume(userId=${session.user.userId})}" target="_self">我的简历</a>
                                             </li>
                                             <li th:if="${session.user !=null}">
                                                 <a th:href="@{/collect(userId=${session.user.userId})}" target="_self">我的收藏</a>
                                             </li>
+
                                             <!--/*@thymesVar id="user" type="com.entity.User"*/-->
                                             <div class="login-btn pt-36" th:if="${session.user} == null">
                                                 <a href="#" data-toggle="modal" data-target="#productModal" >登录</a>
@@ -337,7 +341,65 @@
                     </div>
                 </div>
             </div>
-        </div>        <!--End of Login Form-->
+        </div>
+
+        <!--调查问卷-->
+        <div class="modal fade" id="answerModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-pop-up-content pt-60 pb-60 pl-60 pr-60">
+                            <div class="area-title text-center mb-40" th:each="title:${title}">
+                                <h2 class="pt-7 pb-7 pl-40 pr-40" th:text="${title.titleName}"></h2>
+                            </div>
+                            <form th:action="@{/answerSave}" method="post">
+                                <fieldset th:each="title : ${title}">
+                                    <input type="hidden" name="titleName" th:value="${title.titleName}" />
+
+                                    <fieldset>
+                                        <div class="form-box mb-30">
+                                            <div class="question-label mb-10" style="color: black" th:text="${title.titleQuestionone}"></div>
+                                            <input type="text" name="answerOne" placeholder="回答" class="form-control" >
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-box mb-30">
+                                            <div class="question-label mb-10" style="color: black" th:text="${title.titleQuestiontwo}"></div>
+                                            <input type="text" name="answerTwo" placeholder="回答" class="form-control" >
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-box mb-30">
+                                            <div class="question-label mb-10" style="color: black" th:text="${title.titleQuestionthree}"></div>
+                                            <input type="text" name="answerThree" placeholder="回答" class="form-control" >
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-box mb-30">
+                                            <div class="question-label mb-10" style="color: black" th:text="${title.titleQuestionfour}"></div>
+                                            <input type="text" name="answerFour" placeholder="回答" class="form-control" >
+                                        </div>
+                                    </fieldset>
+                                </fieldset>
+                                <div th:unless="${title != null}" class="text-center" style="color: black">
+                                    <h1>当前没有问卷向您发送</h1>
+                                </div>
+                                <div th:if="${title != null}" class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-block">提交</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--End of Login Form-->
 
 
 <script th:src="@{/static/js/vendor/jquery-1.12.4.min.js}"></script>

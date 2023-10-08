@@ -102,6 +102,9 @@ public class AdminController {
         return "manager/login";
     }
 
+    @RequestMapping("/resumeManager")
+    public String resumeManager(){return "manager/resume-list";}
+
     @RequestMapping("/adminLogin")
     public String adminLogin(@RequestParam("adminName") String adminName,
                              @RequestParam("adminPassword") String adminPassword,

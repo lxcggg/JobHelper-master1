@@ -46,6 +46,13 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-2 control-label">用户</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="userName" class="form-control" id="userName_modify_input" readonly placeholder="用户名">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-2 control-label">问题一</label>
                         <div class="col-sm-10">
                             <input type="text" name="answerOne" class="form-control" id="answerOne_modify_input" readonly placeholder="问题一">
@@ -101,6 +108,7 @@
             <th><input type="checkbox" id="check_all" ONCLICK="DoCheck();"></th>
             <th>ID</th>
             <th>问卷名称</th>
+            <th>用户</th>
             <th>问题一</th>
             <th>问题二</th>
             <th>问题三</th>
@@ -185,6 +193,7 @@
             var checkBoxTd = $("<td><input type='checkbox' name='ids' class='check_item'/></td>");
             var answerId = $("<td></td>").append(answer.answerId);
             var titleName = $("<td></td>").append(answer.titleName);
+            var userName = $("<td></td>").append(answer.userName);
             var answerOne = $("<td></td>").addClass("jobscroll").append(answer.answerOne);
             var answerTwo = $("<td></td>").addClass("jobscroll").append(answer.answerTwo);
             var answerThree = $("<td></td>").addClass("jobscroll").append(answer.answerThree);
@@ -200,7 +209,7 @@
             var btnTd = $("<td></td>").append(editBtn).append(" ").append(delBtn);
             //append方法执行完成以后还是返回原来的元素
             $("<tr></tr>").append(checkBoxTd)
-                .append(answerId).append(titleName).append(answerOne).append(answerTwo).append(answerThree).append(answerFour).append(btnTd).appendTo("#answer_table tbody");
+                .append(answerId).append(titleName).append(userName).append(answerOne).append(answerTwo).append(answerThree).append(answerFour).append(btnTd).appendTo("#answer_table tbody");
         })
     }
     //分页
@@ -362,6 +371,7 @@
                 console.log(result);
                 $("#answerId_modify_input").val(result.extend.answer.answerId);
                 $("#titleName_modify_input").val(result.extend.answer.titleName);
+                $("#userName_modify_input").val(result.extend.answer.userName);
                 $("#answerOne_modify_input").val(result.extend.answer.answerOne);
                 $("#answerTwo_modify_input").val(result.extend.answer.answerTwo);
                 $("#answerThree_modify_input").val(result.extend.answer.answerThree);

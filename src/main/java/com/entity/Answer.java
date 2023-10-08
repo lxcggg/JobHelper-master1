@@ -13,16 +13,19 @@ public class Answer {
 
     private String titleName;
 
+    private String userName;
+
     public Answer() {
     }
 
-    public Answer(Integer answerId, String answerOne, String answerTwo, String answerThree, String answerFour, String titleName) {
+    public Answer(Integer answerId, String answerOne, String answerTwo, String answerThree, String answerFour, String titleName, String userName) {
         this.answerId = answerId;
         this.answerOne = answerOne;
         this.answerTwo = answerTwo;
         this.answerThree = answerThree;
         this.answerFour = answerFour;
         this.titleName = titleName;
+        this.userName = userName;
     }
 
     public Integer getAnswerId() {
@@ -73,15 +76,24 @@ public class Answer {
         this.titleName = titleName;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     @Override
     public String toString() {
-        return "answer{" +
+        return "Answer{" +
                 "answerId=" + answerId +
                 ", answerOne='" + answerOne + '\'' +
                 ", answerTwo='" + answerTwo + '\'' +
                 ", answerThree='" + answerThree + '\'' +
                 ", answerFour='" + answerFour + '\'' +
                 ", titleName='" + titleName + '\'' +
+                ", userName='" + userName + '\'' +
                 '}';
     }
 }

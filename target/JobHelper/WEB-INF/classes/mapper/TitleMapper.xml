@@ -53,4 +53,13 @@ where title_id = #{titleId,jdbcType=INTEGER}
     <select id="getByCategory" parameterType="java.lang.String" resultMap="BaseResultMap">
         SELECT * FROM jh_title
     </select>
+    <select id="selectTitle" resultMap="BaseResultMap">
+        SELECT  title_questionone, title_questiontwo, title_questionthree, title_questionfour, title_name
+        FROM jh_title
+        WHERE title_state = '已发布';
+    </select>
+
+        <select id="selectState" resultMap="BaseResultMap" >
+           SELECT * FROM jh_title WHERE title_state = '已发布';
+        </select>
 </mapper>
